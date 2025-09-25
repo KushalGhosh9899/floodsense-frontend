@@ -1,6 +1,8 @@
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { LatLngTuple, Map, map, tileLayer, polygon, Polygon} from 'leaflet';
+import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { LatLngTuple, Map, map, tileLayer, polygon, Polygon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { FloodUiModel } from '../../models/FloodUiModel';
+import { FloodViewModel } from '../../../domain/viewmodels/FloodViewModel';
 
 @Component({
   selector: 'app-impacted-areas',
@@ -18,46 +20,27 @@ export class ImpactedAreas implements AfterViewInit {
   private floodLayers: Polygon[] = [];
   public floodZonesVisible: boolean = true; // State to manage toggle
 
-  // Mock flood regions for Delhi
-  floodRegions = [
-    {
-      name: 'East Delhi',
-      description: 'Flood impacted near Yamuna river',
-      coordinates: [
-        [77.275, 28.64],
-        [77.29, 28.64],
-        [77.29, 28.65],
-        [77.275, 28.65],
-        [77.275, 28.64]
-      ]
-    },
-    {
-      name: 'Shahdara',
-      description: 'Residential & market area',
-      coordinates: [
-        [77.270, 28.670],
-        [77.290, 28.670],
-        [77.290, 28.685],
-        [77.270, 28.685],
-        [77.270, 28.670]
-      ]
-    },
-    {
-      name: 'Mayur Vihar',
-      description: 'Residential neighborhood',
-      coordinates: [
-        [77.310, 28.600],
-        [77.325, 28.600],
-        [77.325, 28.615],
-        [77.310, 28.615],
-        [77.310, 28.600]
-      ]
-    }
-  ];
+  @Input() floodRegions: FloodUiModel[] = [];
 
+  constructor(private vm: FloodViewModel) { }
+
+  ngOnInit(): void {
+    this.vm.loadFloodRegions({
+      region_id: '220b1179-d614-49de-8019-d7ad0f444290',
+      from_in_ddMMyyHHmmss: '190925121212',
+      to_in_ddMMyyHHmmss: '200925201212'
+    });
+
+    this.vm.floodRegions$.subscribe(regions => {
+      if (regions.length > 0) {
+        this.floodRegions = regions;
+      }
+      console.log('Flood Regions →', this.floodRegions);
+      this.addFloodRegions();
+    });
+  }
   ngAfterViewInit(): void {
     this.initializeMap();
-    this.addFloodRegions();
     this.addToggleListener();
   }
 

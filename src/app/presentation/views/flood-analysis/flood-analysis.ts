@@ -1,15 +1,19 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
-import { LatLngTuple, Map, map, tileLayer, polygon, Polygon} from 'leaflet';
+import { FormsModule } from '@angular/forms';
+import { Polygon, LatLngTuple, tileLayer, polygon, Map, map } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { PieChart } from './pie-chart/pie-chart';
 
 @Component({
-  selector: 'app-impacted-areas',
-  standalone: true,
-  imports: [],
-  templateUrl: './impacted-areas.html',
-  styleUrl: './impacted-areas.css'
+  selector: 'app-flood-analysis',
+  imports: [
+    FormsModule,
+    PieChart
+  ],
+  templateUrl: './flood-analysis.html',
+  styleUrl: './flood-analysis.css'
 })
-export class ImpactedAreas implements AfterViewInit {
+export class FloodAnalysis implements AfterViewInit {
   @ViewChild('map') mapElementRef!: ElementRef;
   @ViewChild('floodToggle') floodToggle!: ElementRef<HTMLInputElement>;
 
@@ -68,12 +72,10 @@ export class ImpactedAreas implements AfterViewInit {
     this.map = map(this.mapElementRef.nativeElement).setView(delhiCoords, initialZoom);
 
     tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      attribution: '&copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, DeLorme, NAVTEQ',
       maxZoom: 16
     }).addTo(this.map);
 
     tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
-      attribution: '&copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, DeLorme, NAVTEQ',
       maxZoom: 16,
       opacity: 0.75
     }).addTo(this.map);
@@ -119,6 +121,22 @@ export class ImpactedAreas implements AfterViewInit {
           this.map.removeLayer(layer);
         }
       }
+    });
+  }
+
+  public onWaterLevelChange(): void {
+    console.log('New water level:', this.waterLevel, 'm');
+    // Implement logic here to change flood zone opacity or visibility
+    this.updateFloodLayerVisibility(this.waterLevel);
+  }
+
+  // New method to update layer visibility based on water level
+  private updateFloodLayerVisibility(level: number): void {
+    // Example logic:
+    // If water level is above a certain threshold, change opacity.
+    const opacity = level / 10; // Simple linear scale
+    this.floodLayers.forEach(layer => {
+      layer.setStyle({ fillOpacity: opacity });
     });
   }
 

@@ -1,0 +1,24 @@
+<div class="relative inline-block w-48">
+  <div
+    class="flex cursor-pointer font-medium items-center justify-between rounded-md py-2 text-sm text-text-soft-white focus:outline-none"
+    (click)="toggleDropdown()"
+  >
+    <span>{{ currentSelectedOption.name }}</span>
+    <i
+      class="fas fa-chevron-down transform transition-transform duration-300"
+      [class.rotate-180]="isOpen"
+    ></i>
+  </div>
+
+  @if (isOpen) {
+  <div
+    class="absolute z-10 mt-1 w-full rounded-md border border-gray-600 shadow-lg bg-background-secondary"
+  >
+    @for (area of areas; track $index) {
+    <div class="cursor-pointer p-2 hover:font-bold" (click)="selectArea(area)">
+      {{ area.name }}
+    </div>
+    }
+  </div>
+  }
+</div>

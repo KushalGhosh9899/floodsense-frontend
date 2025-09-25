@@ -1,0 +1,31 @@
+<div class="flex flex-col items-center">
+  <div class="py-4">
+    <div
+      class="relative w-[10rem] h-[10rem] rounded-full shadow-md"
+      [style.background]="
+        'conic-gradient(#F59E0B 0% ' +
+        floodedPercentage +
+        '%, #22C55E ' +
+        floodedPercentage +
+        '% 100%)'
+      "
+    >
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[7rem] h-[7rem] bg-background-secondary rounded-full"
+      ></div>
+    </div>
+  </div>
+
+  <div class="mt-4 flex flex-col gap-2 text-sm text-text-soft-white">
+    <strong>{{totalRegions}} Total Subregions</strong>
+    <div class="flex items-center gap-2">
+      <div class="h-4 w-4 rounded-full bg-amber-500 flex-shrink-0"></div>
+      <span><strong>{{floodedRegions}}</strong> Flooded</span>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <div class="h-4 w-4 rounded-full bg-green-500 flex-shrink-0"></div>
+      <span><strong>{{unfloodedRegions}}</strong> Unaffected</span>
+    </div>
+  </div>
+</div>

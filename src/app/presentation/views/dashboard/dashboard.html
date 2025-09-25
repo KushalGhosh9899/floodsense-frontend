@@ -1,15 +1,19 @@
-<div class="flex h-screen bg-background-primary text-text-soft-white">
-  <div class="w-1/4 p-4">
+<div class="flex h-screen bg-background-primary text-text-soft-white p-4">
+  <div class="w-[20%] mr-4">
     <app-sidebar
-      [menuItems]="menuItems"
-      [selectedItemId]="selectedItem?.id"
+      [selectedItem]="selectedItem"
       (itemSelected)="onItemSelected($event)"
     ></app-sidebar>
   </div>
 
-  <div class="w-3/4 p-4 pl-0">
-    <app-detail
-      [selectedItem]="selectedItem"
-    ></app-detail>
+  <div class="w-[80%] h-full">
+    @switch (selectedItem) { @case (sideMenuItems.DASHBOARD) {
+    <app-impacted-areas class="w-full h-full"></app-impacted-areas>
+    } @case (sideMenuItems.ANALYTICS) {
+    <app-flood-analysis class="w-full h-full"></app-flood-analysis>
+    } @case (sideMenuItems.SETTINGS) {
+    <app-settings></app-settings> } @case(sideMenuItems.ABOUT){
+    <app-about-us></app-about-us>
+    }}
   </div>
 </div>

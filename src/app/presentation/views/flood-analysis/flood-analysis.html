@@ -1,0 +1,29 @@
+<div class="flex h-full w-full gap-4">
+  <div class="relative w-[80%]">
+    <div #map id="map" class="h-full w-full rounded-md z-10"></div>
+    <div
+      class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 w-80 rounded-lg bg-white bg-opacity-80 p-4 shadow-lg"
+    >
+      <label for="water-level-slider" class="block text-sm font-medium text-gray-700">
+        Water Level: {{ waterLevel }}m
+      </label>
+      <input
+        id="water-level-slider"
+        type="range"
+        min="0"
+        max="10"
+        step="0.1"
+        [(ngModel)]="waterLevel"
+        (input)="onWaterLevelChange()"
+        class="h-2 w-full appearance-none cursor-pointer rounded-lg bg-gray-200"
+      />
+    </div>
+  </div>
+
+  <div class="w-[20%] bg-background-secondary rounded-md p-4 text-text-soft-white">
+    <h3 class="text-lg font-bold">Impact Analysis</h3>
+    <p class="text-xs text-gray-400 font-semibold">This interactive map displays flood-impacted regions by simulating varying water levels.
+    </p>
+    <app-pie-chart [floodedRegions]="7" [totalRegions]="10"></app-pie-chart>
+  </div>
+</div>

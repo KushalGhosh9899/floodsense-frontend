@@ -1,3 +1,15 @@
 <div class="map-container">
-  <div #map id="map"></div>
+
+  <div class="z-20 bg-text-soft-white rounded-lg shadow p-3 max-w-xs absolute top-4 right-4">
+    <div class="flex items-center justify-between mb-2">
+      <input type="checkbox" #floodToggle checked class="form-checkbox text-accent-teal h-4 w-4 mr-2" />
+      <span class="text-sm font-semibold text-text-dark">Flood Impacted Regions</span>
+    </div>
+    <div class="flex items-center text-xs text-background-secondary">
+      <div class="h-4 w-4 rounded-full bg-accent-teal mr-2 opacity-50"></div>
+      <span>Impacted Zones</span>
+    </div>
+  </div>
+
+  <div #map id="map" class="rounded-md z-10"></div>
 </div>

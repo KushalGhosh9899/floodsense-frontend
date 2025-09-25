@@ -1,20 +1,69 @@
-<div class="bg-background-secondary rounded-md h-full p-4 text-shadow-dark">
-  <h2 class="text-2xl font-bold mb-3 tracking-wide flex items-center gap-1">
+<div class="bg-background-secondary rounded-md h-full text-shadow-dark">
+  <h2 class="text-2xl font-bold px-4 pt-4 pb-2 tracking-wide flex items-center gap-1">
     <span class="text-accent-teal">Flood</span>
     <strong class="text-text-soft-white">Sense</strong>
     <i class="fa-solid fa-droplet text-accent-teal text-lg"></i>
   </h2>
 
-  <ul class="space-y-1">
+  <!-- Area selector -->
+  <div class="text-text-soft-white px-4 mb-4">
+
+    <app-dropdown [areas]="areaRegions"></app-dropdown>
+
+    <div class="text-xs font-medium">
+      <p class="text-gray-400">10 Sub Regions</p>
+      <p class="text-gray-400">Capital city of India</p>
+    </div>
+  </div>
+
+  <ul class="space-y-0">
     <li
-      *ngFor="let item of menuItems"
-      class="p-2 rounded-md cursor-pointer transition-colors"
-      [ngClass]="
-        item.id === selectedItemId ? 'bg-text-soft-white font-semibold text-background-primary' : ''
-      "
-      (click)="selectItem(item)"
+      class="cursor-pointer transition-colors"
+      [ngClass]="{
+        'bg-accent-blue/40 font-semibold text-white': selectedItem === menuItems.DASHBOARD,
+        'hover:bg-accent-blue/20': selectedItem !== menuItems.DASHBOARD
+      }"
+      (click)="selectItem(menuItems.DASHBOARD)"
     >
-      {{ item.title }}
+      <span class="py-2 px-4 flex items-center gap-2"
+        ><i class="fa-solid fa-house"></i> Dashboard</span
+      >
+    </li>
+    <li
+      class="cursor-pointer transition-colors"
+      [ngClass]="{
+        'bg-accent-blue/40 font-semibold text-white': selectedItem === menuItems.ANALYTICS,
+        'hover:bg-accent-blue/20': selectedItem !== menuItems.ANALYTICS
+      }"
+      (click)="selectItem(menuItems.ANALYTICS)"
+    >
+      <span class="py-2 px-4 flex items-center gap-2"
+        ><i class="fa-solid fa-chart-simple"></i> Analysis</span
+      >
+    </li>
+    <li
+      class="cursor-pointer transition-colors"
+      [ngClass]="{
+        'bg-accent-blue/40 font-semibold text-white': selectedItem === menuItems.SETTINGS,
+        'hover:bg-accent-blue/20': selectedItem !== menuItems.SETTINGS
+      }"
+      (click)="selectItem(menuItems.SETTINGS)"
+    >
+      <span class="py-2 px-4 flex items-center gap-2"
+        ><i class="fa-solid fa-gear"></i>Settings</span
+      >
+    </li>
+    <li
+      class="cursor-pointer transition-colors"
+      [ngClass]="{
+        'bg-accent-blue/40 font-semibold text-white': selectedItem === menuItems.ABOUT,
+        'hover:bg-accent-blue/20': selectedItem !== menuItems.ABOUT
+      }"
+      (click)="selectItem(menuItems.ABOUT)"
+    >
+      <span class="py-2 px-4 flex items-center gap-2"
+        ><i class="fa-solid fa-circle-info"></i>About Us</span
+      >
     </li>
   </ul>
 </div>

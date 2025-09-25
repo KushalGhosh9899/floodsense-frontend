@@ -1,0 +1,128 @@
+<div class="h-full bg-background-secondary rounded-md p-4">
+  <h1 class="text-xl font-bold text-text-soft-white mb-3">Settings</h1>
+  <div class="grid grid-cols-2 gap-3">
+    <div>
+      <div class="p-4 rounded-lg shadow-lg border border-gray-500">
+        <h2 class="text-lg font-bold text-text-soft-white mb-2">General Settings</h2>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-text-soft-white font-semibold">Theme</span>
+            <div class="flex items-center space-x-2">
+              <button
+                class="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+              >
+                {{ theme === 'dark' ? 'Dark' : 'Light' }}
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span class="text-text-soft-white font-semibold">Default View</span>
+            <select [(ngModel)]="defaultView" class="p-2 border border-gray-500 rounded-lg text-sm">
+              <option value="dashboard">Dashboard</option>
+            </select>
+          </div>
+
+          <div class="flex items-center justify-between">
+            <span class="text-text-soft-white font-semibold">Units</span>
+            <select [(ngModel)]="units" class="p-2 border border-gray-500 rounded-lg text-sm">
+              <option value="metric">Meters (m) / km²</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="mt-3 p-4 rounded-lg shadow-lg border border-gray-500">
+        <h2 class="text-lg font-bold text-text-soft-white mb-2">Notification Settings</h2>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <label for="email-alerts" class="text-text-soft-white font-semibold">Email Alerts</label>
+            <input
+              type="checkbox"
+              id="email-alerts"
+              [(ngModel)]="emailAlerts"
+              class="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+              disabled
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <label for="push-notifications" class="text-text-soft-white font-semibold">Push Notifications</label>
+            <input
+              type="checkbox"
+              id="push-notifications"
+              [(ngModel)]="pushNotifications"
+              class="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+              disabled
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-4 rounded-lg shadow-lg border border-gray-500">
+      <h2 class="text-lg font-bold text-text-soft-white mb-2">Map Settings</h2>
+      <div class="space-y-4">
+        <div>
+          <span class="text-text-soft-white font-semibold block mb-2">Basemap Style</span>
+          <div class="flex flex-wrap gap-2">
+            <button
+              (click)="basemapStyle = 'minimalist'"
+              [ngClass]="{
+                'bg-accent-blue text-white': basemapStyle === 'minimalist',
+                'bg-gray-200 text-gray-800': basemapStyle !== 'minimalist'
+              }"
+              class="px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200"
+            >
+              Minimalist
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <span class="text-text-soft-white font-semibold block mb-2">Layer Visibility</span>
+          <div class="space-y-1">
+            <div class="flex items-center justify-between">
+              <label for="flood-polygons" class="text-text-soft-white ">Flood Impact Polygons</label>
+              <input
+                type="checkbox"
+                id="flood-polygons"
+                [(ngModel)]="layers.floodPolygons"
+                class="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+                disabled
+              />
+            </div>
+            <div class="flex items-center justify-between">
+              <label for="roads" class="text-text-soft-white">Roads</label>
+              <input
+                type="checkbox"
+                id="roads"
+                [(ngModel)]="layers.roads"
+                class="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+                disabled
+              />
+            </div>
+            <div class="flex items-center justify-between">
+              <label for="boundaries" class="text-text-soft-white">Administrative Boundaries</label>
+              <input
+                type="checkbox"
+                id="boundaries"
+                [(ngModel)]="layers.boundaries"
+                class="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+                disabled
+              />
+            </div>
+            <div class="flex items-center justify-between">
+              <label for="poi" class="text-text-soft-white">Points of Interest</label>
+              <input
+                type="checkbox"
+                id="poi"
+                [(ngModel)]="layers.pointsOfInterest"
+                class="form-checkbox h-5 w-5 text-blue-600 rounded-md"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

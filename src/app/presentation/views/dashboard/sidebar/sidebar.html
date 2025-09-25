@@ -1,0 +1,20 @@
+<div class="bg-background-secondary rounded-md h-full p-4 text-shadow-dark">
+  <h2 class="text-2xl font-bold mb-3 tracking-wide flex items-center gap-1">
+    <span class="text-accent-teal">Flood</span>
+    <strong class="text-text-soft-white">Sense</strong>
+    <i class="fa-solid fa-droplet text-accent-teal text-lg"></i>
+  </h2>
+
+  <ul class="space-y-1">
+    <li
+      *ngFor="let item of menuItems"
+      class="p-2 rounded-md cursor-pointer transition-colors"
+      [ngClass]="
+        item.id === selectedItemId ? 'bg-text-soft-white font-semibold text-background-primary' : ''
+      "
+      (click)="selectItem(item)"
+    >
+      {{ item.title }}
+    </li>
+  </ul>
+</div>

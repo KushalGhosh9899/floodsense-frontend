@@ -1,2 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
 @import "tailwindcss";
+
+@theme {
+  /* A dark, muted blue or gray for the main background */
+  --color-background-primary: #1A1D25;
+
+  /* A lighter shade of the primary color for cards and containers */
+  --color-background-secondary: #3D424F;
+
+  --color-accent-teal: #00B8D9;
+  --color-accent-blue: #007BFF;
+
+  --color-text-soft-white: #E0E0E0;
+  --color-text-white: #FFFFFF;
+  --color-text-dark: #1A1D25;
+
+  --color-interactive-hover: #3498DB;
+}
+
+@layer utilities {
+  .text-shadow-dark {
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.08);
+  }
+}

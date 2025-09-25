@@ -1,0 +1,13 @@
+<div class="h-full bg-background-secondary rounded-md">
+  <div *ngIf="selectedItem" class="p-4">
+    <h2 class="text-xl font-bold">{{ selectedItem.title }}</h2>
+    <div class="detail-content space-y-4">
+      <p>
+        {{ selectedItem.details }}
+      </p>
+    </div>
+  </div>
+  <div *ngIf="!selectedItem" class="flex items-center justify-center h-full text-gray-400">
+    <p>Select a menu item from the sidebar to view details.</p>
+  </div>
+</div>

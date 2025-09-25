@@ -24,7 +24,8 @@
             ],
             "styles": [
               "src/styles.css",
-              "node_modules/leaflet/dist/leaflet.css"
+              "node_modules/leaflet/dist/leaflet.css",
+              "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
           ]
           },
           "configurations": {

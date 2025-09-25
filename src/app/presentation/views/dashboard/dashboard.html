@@ -1,0 +1,15 @@
+<div class="flex h-screen bg-background-primary text-text-soft-white">
+  <div class="w-1/4 p-4">
+    <app-sidebar
+      [menuItems]="menuItems"
+      [selectedItemId]="selectedItem?.id"
+      (itemSelected)="onItemSelected($event)"
+    ></app-sidebar>
+  </div>
+
+  <div class="w-3/4 p-4 pl-0">
+    <app-detail
+      [selectedItem]="selectedItem"
+    ></app-detail>
+  </div>
+</div>

@@ -7,12 +7,12 @@
 
   <!-- Area selector -->
   <div class="text-text-soft-white px-4 mb-4">
-
-    <app-dropdown [areas]="areaRegions"></app-dropdown>
+    @if (areaRegions.length > 0) {
+    <app-dropdown [areas]="areaRegions"></app-dropdown>}
 
     <div class="text-xs font-medium">
-      <p class="text-gray-400">10 Sub Regions</p>
-      <p class="text-gray-400">Capital city of India</p>
+      <p class="text-gray-400">{{ subRegions }} Sub Regions</p>
+      <p class="text-gray-400">{{ description }}</p>
     </div>
   </div>
 

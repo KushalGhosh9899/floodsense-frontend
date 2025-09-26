@@ -3,6 +3,7 @@ import { LatLngTuple, Map, map, tileLayer, polygon, Polygon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { FloodUiModel } from '../../models/FloodUiModel';
 import { FloodViewModel } from '../../../domain/viewmodels/FloodViewModel';
+import { ENVRIONMENT } from '../../../environment';
 
 @Component({
   selector: 'app-impacted-areas',
@@ -26,7 +27,7 @@ export class ImpactedAreas implements AfterViewInit {
 
   ngOnInit(): void {
     this.vm.loadFloodRegions({
-      region_id: '220b1179-d614-49de-8019-d7ad0f444290',
+      region_id: ENVRIONMENT.DEFAULT_REGION_ID,
       from_in_ddMMyyHHmmss: '190925121212',
       to_in_ddMMyyHHmmss: '200925201212'
     });

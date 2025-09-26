@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import { PieChart } from './pie-chart/pie-chart';
 import { FloodViewModel } from '../../../domain/viewmodels/FloodViewModel';
 import { FloodUiModel } from '../../models/FloodUiModel';
+import { ENVRIONMENT } from '../../../environment';
 
 @Component({
   selector: 'app-flood-analysis',
@@ -25,7 +26,7 @@ export class FloodAnalysis implements AfterViewInit {
   public floodRegions: FloodUiModel[] = [];
 
   private floodLayers: Polygon[] = [];
-  private readonly regionId = '220b1179-d614-49de-8019-d7ad0f444290';
+  private readonly regionId = ENVRIONMENT.DEFAULT_REGION_ID;
 
   constructor(private vm: FloodViewModel) {}
 

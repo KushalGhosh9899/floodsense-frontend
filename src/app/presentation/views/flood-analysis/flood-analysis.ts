@@ -1,7 +1,8 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Map, map, tileLayer, polygon, Polygon, LatLngTuple, LatLngBounds } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
+import * as L from 'leaflet';
 import { PieChart } from './pie-chart/pie-chart';
 import { FloodViewModel } from '../../../domain/viewmodels/FloodViewModel';
 import { FloodUiModel } from '../../models/FloodUiModel';
@@ -31,6 +32,7 @@ export class FloodAnalysis implements AfterViewInit {
   constructor(private vm: FloodViewModel) {}
 
   ngAfterViewInit(): void {
+  L.Icon.Default.imagePath = 'assets/leaflet/';
     // Initialize map. This must happen before anything else.
     this.initializeMap();
 
@@ -55,7 +57,7 @@ export class FloodAnalysis implements AfterViewInit {
   private initializeMap(): void {
     if (this.map) return; // Prevent re-initialization
     const delhiCoords: LatLngTuple = [28.64, 77.28];
-    this.map = map(this.mapElementRef.nativeElement).setView(delhiCoords, 12);
+    this.map = L.map(this.mapElementRef.nativeElement).setView(delhiCoords, 12);
 
     tileLayer(
       'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',

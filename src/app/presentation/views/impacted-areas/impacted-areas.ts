@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { LatLngTuple, Map, map, tileLayer, polygon, Polygon } from 'leaflet';
-import 'leaflet/dist/leaflet.css';
+// import 'leaflet/dist/leaflet.css';
+import * as L from 'leaflet';
 import { FloodUiModel } from '../../models/FloodUiModel';
 import { FloodViewModel } from '../../../domain/viewmodels/FloodViewModel';
 import { ENVRIONMENT } from '../../../environment';
@@ -26,6 +27,7 @@ export class ImpactedAreas implements AfterViewInit {
   constructor(private vm: FloodViewModel) { }
 
   ngOnInit(): void {
+  L.Icon.Default.imagePath = 'assets/leaflet/';
     this.vm.loadFloodRegions({
       region_id: ENVRIONMENT.DEFAULT_REGION_ID,
       from_in_ddMMyyHHmmss: '190925121212',
@@ -48,7 +50,7 @@ export class ImpactedAreas implements AfterViewInit {
     const delhiCoords: LatLngTuple = [28.64, 77.28];
     const initialZoom = 12;
 
-    this.map = map(this.mapElementRef.nativeElement).setView(delhiCoords, initialZoom);
+    this.map = L.map(this.mapElementRef.nativeElement).setView(delhiCoords, initialZoom);
 
     tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
       attribution: '&copy; <a href="https://www.esri.com">Esri</a> &mdash; Esri, DeLorme, NAVTEQ',

@@ -10,9 +10,9 @@
       <input
         id="water-level-slider"
         type="range"
-        min="0"
-        max="10"
-        step="0.1"
+        min="50"
+        max="350"
+        step="1"
         [(ngModel)]="waterLevel"
         (input)="onWaterLevelChange()"
         class="h-2 w-full appearance-none cursor-pointer rounded-lg bg-gray-200"
@@ -24,6 +24,6 @@
     <h3 class="text-lg font-bold">Impact Analysis</h3>
     <p class="text-xs text-gray-400 font-semibold">This interactive map displays flood-impacted regions by simulating varying water levels.
     </p>
-    <app-pie-chart [floodedRegions]="7" [totalRegions]="10"></app-pie-chart>
+    <app-pie-chart [floodedRegions]="floodedSubRegions" [totalRegions]="totalSubRegions"></app-pie-chart>
   </div>
 </div>

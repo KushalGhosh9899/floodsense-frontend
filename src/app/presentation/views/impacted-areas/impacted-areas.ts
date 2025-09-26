@@ -35,7 +35,6 @@ export class ImpactedAreas implements AfterViewInit {
       if (regions.length > 0) {
         this.floodRegions = regions;
       }
-      console.log('Flood Regions →', this.floodRegions);
       this.addFloodRegions();
     });
   }

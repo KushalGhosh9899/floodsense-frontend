@@ -1,79 +1,65 @@
 import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Polygon, LatLngTuple, tileLayer, polygon, Map, map } from 'leaflet';
+import { Map, map, tileLayer, polygon, Polygon, LatLngTuple, LatLngBounds } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { PieChart } from './pie-chart/pie-chart';
+import { FloodViewModel } from '../../../domain/viewmodels/FloodViewModel';
+import { FloodUiModel } from '../../models/FloodUiModel';
 
 @Component({
   selector: 'app-flood-analysis',
-  imports: [
-    FormsModule,
-    PieChart
-  ],
+  standalone: true,
+  imports: [FormsModule, PieChart],
   templateUrl: './flood-analysis.html',
   styleUrl: './flood-analysis.css'
 })
 export class FloodAnalysis implements AfterViewInit {
   @ViewChild('map') mapElementRef!: ElementRef;
   @ViewChild('floodToggle') floodToggle!: ElementRef<HTMLInputElement>;
+  totalSubRegions:number=30
+  floodedSubRegions:number=0;
 
   public map!: Map;
-  public waterLevel: number = 0;
-  private floodLayers: Polygon[] = [];
-  public floodZonesVisible: boolean = true; // State to manage toggle
+  public floodZonesVisible: boolean = true;
+  public waterLevel: number = 230;
+  public floodRegions: FloodUiModel[] = [];
 
-  // Mock flood regions for Delhi
-  floodRegions = [
-    {
-      name: 'East Delhi',
-      description: 'Flood impacted near Yamuna river',
-      coordinates: [
-        [77.275, 28.64],
-        [77.29, 28.64],
-        [77.29, 28.65],
-        [77.275, 28.65],
-        [77.275, 28.64]
-      ]
-    },
-    {
-      name: 'Shahdara',
-      description: 'Residential & market area',
-      coordinates: [
-        [77.270, 28.670],
-        [77.290, 28.670],
-        [77.290, 28.685],
-        [77.270, 28.685],
-        [77.270, 28.670]
-      ]
-    },
-    {
-      name: 'Mayur Vihar',
-      description: 'Residential neighborhood',
-      coordinates: [
-        [77.310, 28.600],
-        [77.325, 28.600],
-        [77.325, 28.615],
-        [77.310, 28.615],
-        [77.310, 28.600]
-      ]
-    }
-  ];
+  private floodLayers: Polygon[] = [];
+  private readonly regionId = '220b1179-d614-49de-8019-d7ad0f444290';
+
+  constructor(private vm: FloodViewModel) {}
 
   ngAfterViewInit(): void {
+    // Initialize map. This must happen before anything else.
     this.initializeMap();
-    this.addFloodRegions();
+
+    // Subscribe to flood regions data.
+    // The polygons are added ONLY when new data arrives.
+    this.vm.analyseFloodRegions$.subscribe(regions => {
+      if (!this.map) return; // Defensive check
+      this.floodRegions = regions;
+      this.clearFloodLayers();
+      this.addFloodRegions();
+      this.floodedSubRegions = regions.length
+    });
+
+    // Add the toggle listener.
     this.addToggleListener();
+
+    // Trigger the initial data load for the first time.
+    // The subscription above will handle the polygon creation when data arrives.
+    this.loadImpactAnalysis(this.waterLevel);
   }
 
   private initializeMap(): void {
+    if (this.map) return; // Prevent re-initialization
     const delhiCoords: LatLngTuple = [28.64, 77.28];
-    const initialZoom = 12;
+    this.map = map(this.mapElementRef.nativeElement).setView(delhiCoords, 12);
 
-    this.map = map(this.mapElementRef.nativeElement).setView(delhiCoords, initialZoom);
-
-    tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 16
-    }).addTo(this.map);
+    tileLayer(
+      'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}',
+      { maxZoom: 16 }
+    ).addTo(this.map);
 
     tileLayer('https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png', {
       maxZoom: 16,
@@ -82,62 +68,57 @@ export class FloodAnalysis implements AfterViewInit {
   }
 
   private addFloodRegions(): void {
-    this.floodRegions.forEach(region => {
-      const leafletCoords: LatLngTuple[] = region.coordinates.map(
-        (c: number[]) => [c[1], c[0]] as LatLngTuple
-      );
+    // Check if the map is valid before trying to add layers to it
+    if (!this.map || !this.floodRegions || this.floodRegions.length === 0) return;
 
-      const floodLayer = polygon(leafletCoords, {
+    const bounds = new LatLngBounds([]);
+
+    this.floodRegions.forEach(region => {
+      const coords: LatLngTuple[] = region.coordinates.map(([lng, lat]) => [lat, lng]);
+      coords.forEach(coord => bounds.extend(coord));
+
+      const floodLayer = polygon(coords, {
         color: '#00B8D9',
         weight: 2,
         fillColor: '#00B8D9',
         fillOpacity: 0.5
-      })
-        .addTo(this.map)
-        .bindPopup(`<b>${region.name}</b><br>${region.description}`);
+      }).addTo(this.map).bindPopup(`<b>${region.name}</b><br>${region.description || ''}`);
 
       this.floodLayers.push(floodLayer);
     });
+
+    if (bounds.isValid()) this.map.fitBounds(bounds);
+  }
+
+  private clearFloodLayers(): void {
+    if (!this.map) return; // Ensure map exists before removing layers
+    this.floodLayers.forEach(layer => {
+      if (this.map.hasLayer(layer)) this.map.removeLayer(layer);
+    });
+    this.floodLayers = [];
   }
 
   private addToggleListener(): void {
-    if (this.floodToggle) {
-      this.floodToggle.nativeElement.addEventListener('change', () => {
-        this.toggleFloodLayers(this.floodToggle.nativeElement.checked);
-      });
-    }
+    if (!this.floodToggle) return;
+    this.floodToggle.nativeElement.addEventListener('change', () => {
+      this.toggleFloodLayers(this.floodToggle.nativeElement.checked);
+    });
   }
 
-  // Existing function to toggle layers
   public toggleFloodLayers(show: boolean): void {
     this.floodZonesVisible = show;
-    this.floodLayers.forEach(layer => {
-      if (show) {
-        if (!this.map.hasLayer(layer)) {
-          layer.addTo(this.map);
-        }
-      } else {
-        if (this.map.hasLayer(layer)) {
-          this.map.removeLayer(layer);
-        }
-      }
-    });
+    this.floodLayers.forEach(layer => show ? layer.addTo(this.map) : this.map.removeLayer(layer));
   }
 
   public onWaterLevelChange(): void {
-    console.log('New water level:', this.waterLevel, 'm');
-    // Implement logic here to change flood zone opacity or visibility
-    this.updateFloodLayerVisibility(this.waterLevel);
+    // This correctly re-triggers the data fetch when the slider changes.
+    this.loadImpactAnalysis(this.waterLevel);
   }
 
-  // New method to update layer visibility based on water level
-  private updateFloodLayerVisibility(level: number): void {
-    // Example logic:
-    // If water level is above a certain threshold, change opacity.
-    const opacity = level / 10; // Simple linear scale
-    this.floodLayers.forEach(layer => {
-      layer.setStyle({ fillOpacity: opacity });
+  private loadImpactAnalysis(level: number): void {
+    this.vm.loadFloodImpact({
+      region_id: this.regionId,
+      water_levels_in_meters: level
     });
   }
-
 }

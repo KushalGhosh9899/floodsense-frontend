@@ -19,12 +19,6 @@
 export const APP_ROUTES = {
     LANDING_PAGE: '',
     HOME: 'home/:page',
+    HOME_WITHOUT_PARAM :'home',
     NOT_FOUND_PAGE: 'not-found'
-} as const;
-
-export const HOME_PARAMS_ROUTES = {
-    DASHBOARD: 'dashboard',
-    ANALYSIS: 'analysis',
-    SETTINGS: 'settings',
-    ABOUT_US: 'about-us'
 } as const;

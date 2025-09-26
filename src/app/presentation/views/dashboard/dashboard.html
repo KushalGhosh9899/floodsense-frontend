@@ -7,13 +7,13 @@
   </div>
 
   <div class="w-[80%] h-full">
-    @switch (selectedItem) { @case (sideMenuItems.DASHBOARD) {
-    <app-impacted-areas class="w-full h-full"></app-impacted-areas>
-    } @case (sideMenuItems.ANALYTICS) {
-    <app-flood-analysis class="w-full h-full"></app-flood-analysis>
-    } @case (sideMenuItems.SETTINGS) {
-    <app-settings></app-settings> } @case(sideMenuItems.ABOUT){
-    <app-about-us></app-about-us>
-    }}
+    @if (selectedItem) {
+    <ng-container>
+      @switch (selectedItem) { @case (sideMenuItems.DASHBOARD) {
+      <app-impacted-areas class="w-full h-full"></app-impacted-areas>} @case
+      (sideMenuItems.ANALYTICS) { <app-flood-analysis class="w-full h-full"></app-flood-analysis>}
+      @case (sideMenuItems.SETTINGS) { <app-settings></app-settings>} @case (sideMenuItems.ABOUT)
+      {<app-about-us></app-about-us>} } </ng-container
+    >}
   </div>
 </div>
